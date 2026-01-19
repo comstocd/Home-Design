@@ -138,7 +138,6 @@ const entrances = {
     ]
 };
 
-// Preload images
 function preloadImages(list) {
     list.forEach(room => {
         const img = new Image();
@@ -149,7 +148,7 @@ function preloadImages(list) {
 function showEntrance(type) {
     currentEntrance = type;
 
-    // Remove clicked entrance from landing
+    // Remove clicked entrance thumbnail
     const landingDiv = document.getElementById('landing');
     const items = Array.from(landingDiv.children);
     items.forEach(item => {
@@ -159,6 +158,7 @@ function showEntrance(type) {
     });
 
     landingDiv.style.display = 'none';
+
     const roomsDiv = document.getElementById('rooms');
     roomsDiv.style.display = 'flex';
     roomsDiv.innerHTML = '';
