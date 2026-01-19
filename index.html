@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Design Gallery</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+    }
+
+    h1, #rooms-heading {
+        margin-bottom: 20px;
+    }
+
+    #rooms-heading {
+        padding: 10px 20px;
+        border-radius: 8px;
+        background-color: #fff;
+        display: inline-block;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        transition: background-color 0.2s;
+    }
+
+    .gallery {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .gallery-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+        opacity: 0;
+        animation: fadeIn 0.6s forwards;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(20px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    .gallery-item {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+        width: 180px;
+        cursor: pointer;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s, filter 0.3s;
+    }
+
+    .gallery-item img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.3s, filter 0.3s, opacity 0.3s;
+        opacity: 0;
+        animation: fadeInImage 0.5s forwards;
+    }
+
+    @keyframes fadeInImage {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+
+    .gallery-item:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .gallery-item:hover img {
+        filter: brightness(1.1);
+    }
+
+    #back-button {
+        background-color: #eee;
+        font-weight: bold;
+        padding: 15px 25px;
+        margin-top: 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        font-size: 16px;
+        transition: transform 0.2s, background-color 0.2s;
+    }
+
+    #back-button:hover {
+        transform: scale(1.05);
+        background-color: #ddd;
+    }
+
+    /* Lightbox overlay */
+    #lightbox {
+        position: fixed;
+        display: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.9);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+
+    #lightbox.show {
+        opacity: 1;
+    }
+
+    #lightbox img {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        transition: transform 0.4s ease;
+    }
+
+    #lightbox span {
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        font-size: 40px;
+        color: white;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<h1>Home Design Gallery</h1>
+
+<!-- Landing Page -->
+<div id="landing" class="gallery-row">
+    <div class="gallery-item" id="front-entrance" onclick="showEntrance('Front')">
+        <img src="Entrance2.png" alt="Front Entrance">
+        <p>Front Entrance</p>
+    </div>
+    <div class="gallery-item" id="back-entrance" onclick="showEntrance('Back')">
+        <img src="Rear Entrance.png" alt="Back Entrance">
+        <p>Back Entrance</p>
+    </div>
+</div>
+
+<!-- Rooms Page -->
+<div id="rooms" class="gallery" style="display:none;">
+    <h2 id="rooms-heading"></h2>
+</div>
+
+<!-- Lightbox overlay -->
+<div id="lightbox">
+    <span onclick="closeLightbox()">&times;</span>
+    <img id="lightbox-img" src="" alt="Fullscreen Image">
+</div>
+
+<script>
+let currentEntrance = null;
+let currentIndex = 0;
+
+const entrances = {
+    "Front": [
+        {name: "Foyer", src: "Entrance2.png"},
+        {name: "Great Room", src: "Great Room.png"},
+        {name: "Dining Room", src: "Dining Room.png"},
+        {name: "Kitchen", src: "Kitchen.png"},
+        {name: "Sunroom", src: "Sun Room.png"}
+    ],
+    "Back": [
+        {name: "Mudroom", src: "Mudroom and Laundry.png"},
+        {name: "Pantry", src: "Pantry2.png"},
+        {name: "Kitchen", src: "Kitchen.png"},
+        {name: "Greenhouse", src: "Greenhouse.png"}
+    ]
+};
+
+function preloadImages(list) {
+    list.forEach(room => {
+        const img = new Image();
+        img.src = room.src;
+    });
+}
+
+function showEntrance(type) {
+    currentEntrance = type;
+    document.getElementById('front-entrance').style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+    document.getElementById('back-entrance').style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+    if(type === 'Front') document.getElementById('front-entrance').style.boxShadow = '0 0 20px rgba(0,128,255,0.6)';
+    else document.getElementById('back-entrance').style.boxShadow = '0 0 20px rgba(0,128,255,0.6)';
+
+    document.getElementById('landing').style.display = 'none';
+    const roomsDiv = document.getElementById('rooms');
+    roomsDiv.style.display = 'flex';
+    const heading = document.getElementById('rooms-heading');
+    heading.textContent = type + " Entrance Rooms";
+    heading.style.backgroundColor = type === 'Front' ? '#e0f0ff' : '#f0ffe0';
+
+    roomsDiv.innerHTML = '';
+    roomsDiv.appendChild(heading);
+
+    preloadImages(entrances[type]);
+
+    const rooms = entrances[type];
+    const rowSize = 3;
+
+    for (let i = 0; i < rooms.length; i += rowSize) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'gallery-row';
+        rooms.slice(i, i + rowSize).forEach((room, idx) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'gallery-item';
+            itemDiv.innerHTML = `<img src="${room.src}" alt="${room.name}"><p>${room.name}</p>`;
+            itemDiv.onclick = () => openLightboxWithIndex(idx + i);
+            rowDiv.appendChild(itemDiv);
+        });
+        roomsDiv.appendChild(rowDiv);
+        rowDiv.style.animationDelay = (i/rowSize * 0.15) + 's';
+    }
+
+    const backBtn = document.createElement('button');
+    backBtn.id = 'back-button';
+    backBtn.innerText = 'Back to Entrance Selection';
+    backBtn.onclick = backToLanding;
+    roomsDiv.appendChild(backBtn);
+}
+
+function backToLanding() {
+    currentEntrance = null;
+    document.getElementById('rooms').style.display = 'none';
+    document.getElementById('landing').style.display = 'flex';
+    document.getElementById('front-entrance').style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+    document.getElementById('back-entrance').style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+}
+
+function openLightboxWithIndex(index) {
+    currentIndex = index;
+    openLightbox(entrances[currentEntrance][currentIndex].src);
+}
+
+function openLightbox(src) {
+    const lightbox = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    img.src = src;
+    lightbox.classList.add('show');
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    lightbox.classList.remove('show');
+}
+
+// keyboard navigation
+document.addEventListener('keydown', (e) => {
+    if (!currentEntrance) return;
+    if (!document.getElementById('lightbox').classList.contains('show')) return;
+    const rooms = entrances[currentEntrance];
+    if (e.key === 'ArrowRight') {
+        currentIndex = (currentIndex + 1) % rooms.length;
+        openLightbox(rooms[currentIndex].src);
+    } else if (e.key === 'ArrowLeft') {
+        currentIndex = (currentIndex - 1 + rooms.length) % rooms.length;
+        openLightbox(rooms[currentIndex].src);
+    } else if (e.key === 'Escape') {
+        closeLightbox();
+    }
+});
+</script>
+
+</body>
+</html>
