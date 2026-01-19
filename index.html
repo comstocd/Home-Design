@@ -5,136 +5,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Home Design Gallery</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
-        margin: 0;
-        padding: 20px;
-        text-align: center;
-    }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
 
-    h1, #rooms-heading {
-        margin-bottom: 20px;
-    }
+h1 {
+    margin-bottom: 30px;
+}
 
-    #rooms-heading {
-        padding: 10px 20px;
-        border-radius: 8px;
-        background-color: #fff;
-        display: inline-block;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        transition: background-color 0.2s;
-    }
+.menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
 
-    .gallery {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        align-items: center;
-    }
+.gallery-item {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
 
-    .gallery-row {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        justify-content: center;
-        opacity: 0;
-        animation: fadeIn 0.6s forwards;
-    }
+#landing .gallery-item {
+    width: 300px;
+}
 
-    @keyframes fadeIn {
-        from {opacity: 0; transform: translateY(20px);}
-        to {opacity: 1; transform: translateY(0);}
-    }
+#rooms .gallery-item {
+    width: 180px;
+}
 
-    .gallery-item {
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        overflow: hidden;
-        width: 300px;
-        cursor: pointer;
-        text-align: center;
-        transition: transform 0.3s, box-shadow 0.3s, filter 0.3s;
-    }
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
 
-    .gallery-item img {
-        width: 100%;
-        height: auto;
-        display: block;
-        transition: transform 0.3s, filter 0.3s, opacity 0.3s;
-        opacity: 0;
-        animation: fadeInImage 0.5s forwards;
-    }
+.gallery-item p {
+    margin: 10px 0;
+    font-weight: bold;
+}
 
-    @keyframes fadeInImage {
-        from {opacity: 0;}
-        to {opacity: 1;}
-    }
+#back-button {
+    background-color: #eee;
+    font-weight: bold;
+    padding: 15px 25px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
 
-    .gallery-item:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    }
+#lightbox {
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
 
-    .gallery-item:hover img {
-        filter: brightness(1.1);
-    }
+#lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+}
 
-    #back-button {
-        background-color: #eee;
-        font-weight: bold;
-        padding: 15px 25px;
-        margin-top: 20px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        font-size: 16px;
-        transition: transform 0.2s, background-color 0.2s;
-    }
-
-    #back-button:hover {
-        transform: scale(1.05);
-        background-color: #ddd;
-    }
-
-    /* Lightbox overlay */
-    #lightbox {
-        position: fixed;
-        display: none;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.9);
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        opacity: 0;
-        transition: opacity 0.4s;
-    }
-
-    #lightbox.show {
-        opacity: 1;
-    }
-
-    #lightbox img {
-        max-width: 90%;
-        max-height: 90%;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        transition: transform 0.4s ease;
-    }
-
-    #lightbox span {
-        position: absolute;
-        top: 20px;
-        right: 40px;
-        font-size: 40px;
-        color: white;
-        cursor: pointer;
-    }
+#lightbox span {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -142,21 +98,19 @@
 <h1>Home Design Gallery</h1>
 
 <!-- Landing Page -->
-<div id="landing" class="gallery-row">
-    <div class="gallery-item" id="front-entrance" onclick="showEntrance('Front')">
+<div id="landing" class="menu">
+    <div class="gallery-item" onclick="showEntrance('Front')">
         <img src="Entrance2.png" alt="Front Entrance">
         <p>Front Entrance</p>
     </div>
-    <div class="gallery-item" id="back-entrance" onclick="showEntrance('Back')">
+    <div class="gallery-item" onclick="showEntrance('Back')">
         <img src="Rear Entrance.png" alt="Back Entrance">
         <p>Back Entrance</p>
     </div>
 </div>
 
 <!-- Rooms Page -->
-<div id="rooms" class="gallery" style="display:none;">
-    <h2 id="rooms-heading"></h2>
-</div>
+<div id="rooms" class="menu" style="display:none;"></div>
 
 <!-- Lightbox overlay -->
 <div id="lightbox">
@@ -193,39 +147,20 @@ function preloadImages(list) {
 
 function showEntrance(type) {
     currentEntrance = type;
-    document.getElementById('front-entrance').style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-    document.getElementById('back-entrance').style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-    if(type === 'Front') document.getElementById('front-entrance').style.boxShadow = '0 0 20px rgba(0,128,255,0.6)';
-    else document.getElementById('back-entrance').style.boxShadow = '0 0 20px rgba(0,128,255,0.6)';
-
     document.getElementById('landing').style.display = 'none';
     const roomsDiv = document.getElementById('rooms');
     roomsDiv.style.display = 'flex';
-    const heading = document.getElementById('rooms-heading');
-    heading.textContent = type + " Entrance Rooms";
-    heading.style.backgroundColor = type === 'Front' ? '#e0f0ff' : '#f0ffe0';
-
     roomsDiv.innerHTML = '';
-    roomsDiv.appendChild(heading);
 
     preloadImages(entrances[type]);
 
-    const rooms = entrances[type];
-    const rowSize = 3;
-
-    for (let i = 0; i < rooms.length; i += rowSize) {
-        const rowDiv = document.createElement('div');
-        rowDiv.className = 'gallery-row';
-        rooms.slice(i, i + rowSize).forEach((room, idx) => {
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'gallery-item';
-            itemDiv.innerHTML = `<img src="${room.src}" alt="${room.name}"><p>${room.name}</p>`;
-            itemDiv.onclick = () => openLightboxWithIndex(idx + i);
-            rowDiv.appendChild(itemDiv);
-        });
-        roomsDiv.appendChild(rowDiv);
-        rowDiv.style.animationDelay = (i/rowSize * 0.15) + 's';
-    }
+    entrances[type].forEach((room, idx) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'gallery-item';
+        itemDiv.innerHTML = `<img src="${room.src}" alt="${room.name}"><p>${room.name}</p>`;
+        itemDiv.onclick = () => openLightboxWithIndex(idx);
+        roomsDiv.appendChild(itemDiv);
+    });
 
     const backBtn = document.createElement('button');
     backBtn.id = 'back-button';
@@ -238,8 +173,6 @@ function backToLanding() {
     currentEntrance = null;
     document.getElementById('rooms').style.display = 'none';
     document.getElementById('landing').style.display = 'flex';
-    document.getElementById('front-entrance').style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-    document.getElementById('back-entrance').style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
 }
 
 function openLightboxWithIndex(index) {
@@ -251,18 +184,16 @@ function openLightbox(src) {
     const lightbox = document.getElementById('lightbox');
     const img = document.getElementById('lightbox-img');
     img.src = src;
-    lightbox.classList.add('show');
+    lightbox.style.display = 'flex';
 }
 
 function closeLightbox() {
-    const lightbox = document.getElementById('lightbox');
-    lightbox.classList.remove('show');
+    document.getElementById('lightbox').style.display = 'none';
 }
 
-// keyboard navigation
 document.addEventListener('keydown', (e) => {
     if (!currentEntrance) return;
-    if (!document.getElementById('lightbox').classList.contains('show')) return;
+    if (document.getElementById('lightbox').style.display !== 'flex') return;
     const rooms = entrances[currentEntrance];
     if (e.key === 'ArrowRight') {
         currentIndex = (currentIndex + 1) % rooms.length;
