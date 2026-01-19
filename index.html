@@ -35,11 +35,11 @@ h1 {
 }
 
 #landing .gallery-item {
-    width: 400px;
+    width: 300px;
 }
 
 #rooms .gallery-item {
-    width: 800px;
+    width: 180px;
 }
 
 .gallery-item img {
@@ -99,11 +99,11 @@ h1 {
 
 <!-- Landing Page -->
 <div id="landing" class="menu">
-    <div class="gallery-item" onclick="showEntrance('Front')">
+    <div class="gallery-item" data-entrance="Front">
         <img src="Entrance2.png" alt="Front Entrance">
         <p>Front Entrance</p>
     </div>
-    <div class="gallery-item" onclick="showEntrance('Back')">
+    <div class="gallery-item" data-entrance="Back">
         <img src="Rear Entrance.png" alt="Back Entrance">
         <p>Back Entrance</p>
     </div>
@@ -138,6 +138,7 @@ const entrances = {
     ]
 };
 
+// Preload images
 function preloadImages(list) {
     list.forEach(room => {
         const img = new Image();
@@ -147,7 +148,17 @@ function preloadImages(list) {
 
 function showEntrance(type) {
     currentEntrance = type;
-    document.getElementById('landing').style.display = 'none';
+
+    // Remove clicked entrance from landing
+    const landingDiv = document.getElementById('landing');
+    const items = Array.from(landingDiv.children);
+    items.forEach(item => {
+        if (item.dataset.entrance === type) {
+            item.remove();
+        }
+    });
+
+    landingDiv.style.display = 'none';
     const roomsDiv = document.getElementById('rooms');
     roomsDiv.style.display = 'flex';
     roomsDiv.innerHTML = '';
