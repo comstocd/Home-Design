@@ -99,11 +99,11 @@ h1 {
 
 <!-- Landing Page -->
 <div id="landing" class="menu">
-    <div class="gallery-item" data-entrance="Front">
+    <div class="gallery-item" onclick="showEntrance('Front')">
         <img src="Entrance2.png" alt="Front Entrance">
         <p>Front Entrance</p>
     </div>
-    <div class="gallery-item" data-entrance="Back">
+    <div class="gallery-item" onclick="showEntrance('Back')">
         <img src="Rear Entrance.png" alt="Back Entrance">
         <p>Back Entrance</p>
     </div>
@@ -148,11 +148,13 @@ function preloadImages(list) {
 function showEntrance(type) {
     currentEntrance = type;
 
-    // Remove clicked entrance thumbnail
+    // Remove clicked entrance from landing
     const landingDiv = document.getElementById('landing');
     const items = Array.from(landingDiv.children);
     items.forEach(item => {
-        if (item.dataset.entrance === type) {
+        const alt = item.querySelector('img').alt;
+        if ((type === 'Front' && alt === 'Front Entrance') || 
+            (type === 'Back' && alt === 'Back Entrance')) {
             item.remove();
         }
     });
